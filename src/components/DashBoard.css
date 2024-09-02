@@ -1,0 +1,32 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.DashBoard{
+  position: sticky;
+  top: 0;
+}
+.NavBar{
+    width: 100vw;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #3383f3;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.Links{
+    text-decoration: none;
+    color: white;
+    font-size: 14pt;
+    font-weight: 1000;
+}
+.ButtonContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 460px;
+}
