@@ -8,8 +8,12 @@ import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import DashBoard from "./DashBoard.js";
-import {database, set, ref, onValue } from '../configuration.js';
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import {db} from "../firebase";
+import { collection, getDocs,  getDoc, deleteDoc } from "firebase/firestore";
+import { query, onSnapshot } from "firebase/firestore";
+
 
 function EmployeeButton(props) {
   const navigate = useNavigate()
@@ -17,45 +21,86 @@ function EmployeeButton(props) {
     <div className="EmployeeButtons">
       <div className="EmployeeButtonContainer">
         <div><button className="EmployeeButton" onClick={() => {return navigate('/EmployeeForm');}}>+</button></div>
-        <div><button className="EmployeeButton">-</button></div>
+        <div><button className="EmployeeButton" onClick={props.handleClick}>-</button></div>
       </div>
     </div>
   )
 }
 
-function Employee(props) {
+
+function Employee() {
+  const [popUpState, setPopUp] = useState(false);
   const [employees, setEmployees] = useState([]);
-  
-  useEffect(() => {
-    // Reference to the 'users' node in the database
-    const usersRef = ref(database, 'Employees');
-    const employeesArray = [];
-    // Listen for real-time updates
-    const unsubscribe = onValue(usersRef, (snapshot) => {
-      const data = snapshot.val();
-      for (let key in data){
-        employeesArray.push(data[key])
+
+  function PopUp(props){
+  const [EmployeeID, setID] = useState('');
+  const redirect = useNavigate();
+  const handleDelete = () => {
+    async function deleteEmployee(){
+      try{
+        const docRef = doc(db, "Employees", EmployeeID);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists()){
+          await deleteDoc(docRef);
+          return;
+        }
+        else{
+          throw("Employee Dosen't Exist");
+        }
       }
-      console.log(employeesArray);
-      setEmployees(employeesArray || []);
-      console.log(employees)
-    });
+      catch(error){
+        console.log(error);
+        return;
+      }
+      finally{
+        return;
+      }
+    }
+    deleteEmployee();
+    setPopUp(false);
+  }
+  if(!props.show){
+    return null;
+  }
+  return(
+    <div className="PopUp">
+      <div className="PopUpBox">
+        <div><h1>Delete Employee</h1></div>
+        <div style={{width:'100%',display: "flex", flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}><input className="PopUpInput" placeholder="EmployeeID" onChange={(e) => {setID(e.target.value)}}/></div>
+        <div><button className="PopUpButton" onClick={handleDelete}>Delete</button></div>
+      </div>
+    </div>
+  )
+}
 
-    // Clean up the listener on component unmount
-    return () => unsubscribe();
+
+
+  async function fetchEmployees(){
+    try{
+      const q = query(collection(db, "Employees"));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setEmployees(data);
+      return unsubscribe;
+      });
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    fetchEmployees();
   }, []);
-
-  useEffect(()=>{
-    console.log(employees[0])
-  },[employees])
-
-
- // console.log(employees);
+  const closePopUp = () => {setPopUp(false)};
   return (
     <div className="Employee">
+      <PopUp show={popUpState} onClose={closePopUp}/>
       <DashBoard />
       <div className="EmployeeContainer">
-      <EmployeeButton/>
+      <EmployeeButton handleClick={() => {setPopUp(true)}}/>
       <div className="EmployeeGrid">
         {
           employees.map((emp) => {

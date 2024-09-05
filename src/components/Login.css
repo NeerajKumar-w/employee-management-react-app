@@ -1,88 +1,38 @@
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.LoginBg{
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-image: url('../Assets/Loginbg4.webp');
+.Login{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url(../Assets/Loginbg4.webp);
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 .LoginBox{
-    height: 600px;
-    width: 500px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    border: none;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  height: 600px;
+  width: 500px;
+  background-color: white;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.LoginText{
-    font-size: 25pt;
-    font-weight: 1000;
-}
-.Field{
-    display: flex;
-    flex-direction: column;
-    text-align: start;
-    width: 400px;
-    height: auto;
-    justify-content: center;
-    align-items: start;
-}
-.fwidth{
-    width: inherit;
-    padding: 5px;
-}
-.InputField{
-    height: 40px;
-    width: 100%;
-    border: none; 
-    border-radius: 10px;
-    background-color: whitesmoke;
-    color: black;
-    padding: 2px;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 14pt;
-}
-.LoginButton{
-    height: 40px;
-    width: 80px;
-    color: white;
-    font-weight: 1000;
-    font-size: 14pt;
-    background-color: #3383f2;
-    border: none;
-    border-radius: 10px;
-}
-.Label{
-    font-size: 14pt;
-    font-weight: bold;
-}
-.LoginContainer{
-    height: 400px;
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+.LoginForm{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
-@media only screen and (max-width: 500){
-  .LoginBg{
-    height: 100vh;
-    width: 100vw;
-  }
+@media only screen and (max-width:500px){
   .LoginBox{
-    height: 400px;
-    width: 400px;
+    width: 90%;
   }
 }

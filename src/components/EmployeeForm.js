@@ -1,31 +1,27 @@
 import { useState } from "react";
-import { database, ref, set } from "../configuration";
 import { useNavigate } from "react-router-dom";
-import { push } from "../configuration.js";
+import { db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
+
 
 const EmployeeForm = () => {
   const navigate = useNavigate();
-  const [employeeDetails, setEmployeeDetails] = useState({EmployeeID : '', EmployeeName : '', EmployeeDesignation: ''})
-  const handleSubmit = () => {
-    const EmployeeRef = ref(database, 'Employees/');
-    const newEmployeeRef = push(EmployeeRef);
-    if(employeeDetails.EmployeeID !== '' && employeeDetails.EmployeeName !== '' && employeeDetails.EmployeeDesignation !== ''){
-      set(newEmployeeRef, {
-        EmployeeID : employeeDetails.EmployeeID,
-        EmployeeName : employeeDetails.EmployeeName,
-        EmployeeDesignation : employeeDetails.EmployeeDesignation
-      }).then(() => {
-          console.log("Data Posted Successfully")
-          employeeDetails.EmployeeID = '';
-          employeeDetails.EmployeeName = '';
-          employeeDetails.EmployeeDesignation = '';
-          return navigate('/Employee');
-        })
-        .catch((error) => {
-          console.error("Error Posting Data :", error);
-        })
+  const [employeeDetails, setEmployeeDetails] = useState({EmployeeID : '', EmployeeName : '', EmployeeDesignation: ''});
+  const handleSubmit = async () => {
+    try{
+      await setDoc(doc(db, "Employees", employeeDetails.EmployeeID), {
+        EmployeeName: employeeDetails.EmployeeName,
+        EmployeeID: employeeDetails.EmployeeID,
+        EmployeeDesignation: employeeDetails.EmployeeDesignation,
+      });
+      return navigate('/Employee');
     }
-    console.log(employeeDetails);
+    catch(error){
+      console.log(error);
+    }
+    finally{
+      console.log(employeeDetails);
+    }
   }
   return (
     <div className="EmployeeForm">

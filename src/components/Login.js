@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import './Login.css';
 import { useNavigate } from "react-router-dom";
 
-const initialState = { name: "John", age: 30 };
+const initialState = { userName: '', passWord: '' };
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -14,35 +14,36 @@ const reducer = (state, action) => {
       return state;
   }
 };
-
-function Login() {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    const navigate = useNavigate();
-    return (
-        <div className="LoginBg">
-            <div className="LoginBox">
-                <div><p className="LoginText">Login</p></div>
-                <form className="LoginContainer">
-                    <div className="Field">
-                        <div className="fwidth"><label className="Label" htmlFor="">UserName</label></div>
-                    <div className="fwidth"><input className="InputField" type="text" onChange={(e) => { dispatch({ type: 'userName', payload: e.target.value })} } required/></div>
-                    </div>
-                    <div className="Field">
-                        <div className="fwidth"><label className="Label" htmlFor="">PassWord</label></div>
-                        <div className="fwidth"><input className="InputField" type="password" onChange={(e) => { dispatch({ type: 'passWord', payload: e.target.value })} } required/></div>
-                    </div>
-                    <div><button className="LoginButton" type="submit" onClick={() => {
-                    if (state.userName === 'neeraj' && state.passWord === '123') {
-                        return navigate('/Employee');
-                    }
-                    else {
-                        return;
-                    }
-                    }}>Login</button></div>
-                </form>
-            </div>
-        </div>
-    )
+const Login = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const navigate = useNavigate();
+  const details = {
+    userName: "Neeraj",
+    passWord: "123"
+  }
+  return (
+    <div className="Login">
+      <div className="LoginBox">
+        <form className="LoginForm">
+          <div><h2>Login</h2></div>
+          <div className="field">
+            <div>UserName</div>
+            <div><input placeholder="UserName" onChange={(e) => { dispatch({ type: 'userName', payload: e.target.value }) }} required /></div>
+          </div>
+          <div className="field">
+            <div>PassWord</div>
+            <div><input placeholder="PassWord" onChange={(e) => { dispatch({ type: 'passWord', payload: e.target.value }) }} required /></div>
+          </div>
+          <div><button type="button"onClick={() => {
+            console.log(state);
+            if(state.userName === details.userName && state.passWord === details.passWord){
+              return navigate('/Employee');
+            }
+          }}>Login</button></div>
+        </form>
+      </div>
+    </div>
+  )
 }
 
 export default Login;
